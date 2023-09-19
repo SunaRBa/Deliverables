@@ -1,0 +1,11 @@
+﻿################################################################################
+# この .gitignore ファイルは Microsoft(R) Visual Studio によって自動的に作成されました。
+################################################################################
+
+/Source/DebeggerIDE/Debuger/obj
+/Source/DebeggerIDE/.vs
+/Source/DebeggerIDE/Debuger/bin/Debug/net5.0-windows
+*.user
+/Source/DebeggerIDE/Debuger/bin
+/Source/DebeggerIDE/DebuggerTest/bin
+/Source/DebeggerIDE/DebuggerTest/obj

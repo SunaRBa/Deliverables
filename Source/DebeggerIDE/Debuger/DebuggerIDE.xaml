@@ -1,0 +1,95 @@
+﻿<Window x:Class="Debuger.DebuggerIDE"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Debuger"
+        d:DataContext="{d:DesignInstance local:DebugggerIDEViewModel}"
+        mc:Ignorable="d"
+        Title="デバッグIDE" Height="800" Width="1000" Closed="Window_Closed">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <StackPanel Grid.Row="0" Orientation="Horizontal">
+            <Button Content="実行" Command="{Binding RunCommand}" IsEnabled="{Binding IsEnabledRun.Value}" Margin="5"/>
+            <Button Content="一行実行" Command="{Binding StepCommand}" IsEnabled="{Binding IsEnabledStep.Value}" Margin="5"/>
+            <Button Content="停止" Command="{Binding StopCommand}" IsEnabled="{Binding IsEnabledStop.Value}" Margin="5"/>
+        </StackPanel>
+        <StackPanel Grid.Row="1" Orientation="Horizontal">
+            <TextBlock Text="現在ソース="/>
+            <TextBox Text="{Binding SourcePath.Value}" Margin="0,0,10,0" IsReadOnly="True"/>
+            <TextBlock Text="現在ライン="/>
+            <TextBox Text="{Binding Line.Value}" IsReadOnly="True"/>
+        </StackPanel>
+        <Grid Grid.Row="2">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="6*"/>
+                <ColumnDefinition Width="4*"/>
+            </Grid.ColumnDefinitions>
+            <Grid Grid.Column="0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <Label Grid.Row="0" Content="ソース" Background="AliceBlue"/>
+                <DataGrid Grid.Row="1" ItemsSource="{Binding SourceCollection}" AutoGenerateColumns="False" GridLinesVisibility="None">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="行"  Binding="{Binding Line.Value}" Width="60" IsReadOnly="True"/>
+                        <DataGridTemplateColumn Header="ブレイクポイント"  Width="Auto" IsReadOnly="False">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <CheckBox IsChecked="{Binding BreakPoint.Value,UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" HorizontalAlignment="Center"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTextColumn Header="ソース" Binding="{Binding Source.Value}" Width="*" IsReadOnly="True" >
+                            <DataGridTextColumn.CellStyle>
+                                <Style TargetType="DataGridCell">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding IsSelect.Value}" 
+                                         Value="True">
+                                            <Setter Property="Background" Value="LightGreen"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </DataGridTextColumn.CellStyle>
+                        </DataGridTextColumn>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </Grid>
+            <Grid Grid.Column="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="5*"/>
+                    <RowDefinition Height="5*"/>
+                </Grid.RowDefinitions>
+                <StackPanel Grid.Row="0">
+                    <Label Content="変数" Background="AliceBlue"/>
+                    <DataGrid ItemsSource="{Binding VariableCollection}" AutoGenerateColumns="False">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="変数名"  Binding="{Binding Name.Value}" Width="60" IsReadOnly="True"/>
+                            <DataGridTextColumn Header="型" Binding="{Binding Type.Value}" Width="Auto" IsReadOnly="True"/>
+                            <DataGridTextColumn Header="値"  Binding="{Binding Value.Value}" Width="*" IsReadOnly="True"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </StackPanel>
+                <Grid Grid.Row="1">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <Label Grid.Row="0" Content="アウトプット" Background="AliceBlue"/>
+                    <TextBox x:Name="OutputTextBox" Grid.Row="1" Text="{Binding Output.Value}"
+                     ScrollViewer.VerticalScrollBarVisibility="Auto" 
+                     ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                     IsReadOnly="True"/>
+                </Grid>
+            </Grid>
+        </Grid>
+    </Grid>
+</Window>
